@@ -1,0 +1,27 @@
+<form ng-controller="SignInCtrl" id="sign-in-form" name="signInForm" class="form-horizontal" role="form" novalidate>
+	<div class="form-group" ng-class="{ 'has-error' : (signInForm.$submitted || signInForm.email.$touched) && signInForm.email.$invalid }">
+		<input ng-model="user.email" type="email" name="email" class="form-control" placeholder="Email" required autofocus tabindex="1">
+
+		<div ng-show="signInForm.$submitted || signInForm.email.$touched">
+			<p class="help-block" ng-show="signInForm.email.$error.required">Enter an email.</p>
+			<p class="help-block" ng-show="signInForm.email.$error.email">Enter a valid email.</p>
+		</div>
+	</div>
+
+	<div class="form-group" ng-class="{ 'has-error' : (signInForm.$submitted || signInForm.password.$touched) && signInForm.password.$invalid }">
+		<input ng-model="user.password" type="password" name="password" class="form-control" placeholder="Password" required tabindex="2" minlength="8" maxlength="16">
+
+		<div ng-show="signInForm.$submitted || signInForm.password.$touched">
+			<p class="help-block" ng-show="signInForm.password.$error.required">Enter a password.</p>
+			<p class="help-block" ng-show="signInForm.password.$error.minlength">Too short password.</p>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<button ng-click="signIn($event)" ng-disabled="!user.email || !user.password" id="sign-in-btn" type="submit" class="btn btn-primary" tabindex="3">Sign in</button>
+	</div>
+
+	<div class="form-group">
+		<p class="text-align-center">Not registered yet? <a href="/signUp.html">Sign Up</a></p>
+	</div>
+</form>
