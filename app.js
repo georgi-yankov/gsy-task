@@ -4,7 +4,8 @@
 angular.module('gsyTask', [
 	'ngRoute',
 	'gsyTask.signIn',
-	'gsyTask.signUp'
+	'gsyTask.signUp',
+	'gsyTask.taskManager'
 ]).
 
 config(['$routeProvider', function($routeProvider) {

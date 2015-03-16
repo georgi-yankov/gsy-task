@@ -10,14 +10,16 @@ angular.module('gsyTask.signIn', ['ngRoute'])
 	    return $http.post(serviceBase + 'login', user).then(
 		    function (status) {
 		    	if (status.status === 200) {
-		    		console.log(status.data);
-		    		return status.data;
+		    		$location.path('/taskManager');
 		    	} else if (status.status === 204) {
 		    		LoginInfo.setMessage('Invalid Email address or Password');		
 		    	};	        
 		    },
 		    function(error) {
-		    	console.log(error);
+		    	if (error.status === 400) {
+					LoginInfo.setMessage('Invalid Email address or Password');
+		    	};
+
 		    	return error;
 		    }
 	    );
@@ -35,6 +37,7 @@ angular.module('gsyTask.signIn', ['ngRoute'])
 
 .controller('SignInCtrl', ['$scope', '$location', 'services', 'LoginInfo', function($scope, $location, services, LoginInfo) {
 	$scope.user = {};
+	$scope.messageToShow = false;
 	$scope.message = '';
 
 	$scope.signIn = function(user) {
@@ -43,9 +46,12 @@ angular.module('gsyTask.signIn', ['ngRoute'])
 		setTimeout(function () {
 		        $scope.$apply(function () {
 		            $scope.message = LoginInfo.getMessage();
-		            console.log($scope.message);
+
+		            if ($scope.message) {
+		            	$scope.messageToShow = true;
+		            };		            
 		        });
-		    }, 50);
+		}, 80);
 		
 	};
 }])

@@ -1,6 +1,7 @@
 <form ng-controller="SignInCtrl" id="sign-in-form" name="signInForm" class="form-horizontal" role="form" novalidate>
-
-	<div>{{message}}</div>
+	<div ng-show="messageToShow" class="message-box has-error">
+		<p class="help-block">{{message}}</p>
+	</div>
 
 	<div class="form-group" ng-class="{ 'has-error' : (signInForm.$submitted || signInForm.email.$touched) && signInForm.email.$invalid, 'has-success' : signInForm.email.$valid }">
 		<input ng-model="user.email" type="email" name="email" class="form-control" placeholder="Email" required tabindex="1">
