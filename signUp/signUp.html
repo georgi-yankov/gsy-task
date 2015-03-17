@@ -1,4 +1,8 @@
 <form ng-controller="SignUpCtrl" id="sign-up-form" name="signUpForm" class="form-horizontal" role="form" novalidate>
+	<div ng-show="messageToShow" class="message-box has-error">
+		<p class="help-block">{{message}}</p>
+	</div>
+
 	<div class="form-group" ng-class="{ 'has-error' : (signUpForm.$submitted || signUpForm.email.$touched) && signUpForm.email.$invalid, 'has-success' : signUpForm.email.$valid }">
 		<input ng-model="user.email" type="email" name="email" class="form-control" placeholder="Email" required tabindex="1">
 
@@ -18,7 +22,7 @@
 	</div>
 
 	<div class="form-group">
-		<button ng-click="signUp($event)" ng-disabled="!user.email || !user.password" id="sign-up-btn" type="submit" class="btn btn-primary" tabindex="3">Sign Up</button>
+		<button ng-click="signUp(user)" ng-disabled="!user.email || !user.password" id="sign-up-btn" type="submit" class="btn btn-primary" tabindex="3">Sign Up</button>
 	</div>
 
 	<div class="form-group">

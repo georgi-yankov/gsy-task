@@ -9,14 +9,43 @@ angular.module('gsyTask.signUp', ['ngRoute'])
 	});
 }])
 
-.controller('SignUpCtrl', ['$scope', function($scope) {
+.controller('SignUpCtrl', ['$scope', '$location', 'services', 'SignUpInfo', function($scope, $location, services, SignUpInfo) {
 	$scope.user = {};
+	$scope.messageToShow = false;
+	$scope.message = '';
 
-	$scope.signUp = function(e) {
-		e.preventDefault();
-		var email = $scope.user.email;
-		var password = $scope.user.password;
+	$scope.signUp = function(user) {
+		services.signUp(user);
 
-		console.log($scope);
+		setTimeout(function () {
+		        $scope.$apply(function () {
+		            $scope.message = SignUpInfo.getMessage();
+
+		            if ($scope.message) {
+		            	$scope.messageToShow = true;
+		            };		            
+		        });
+		}, 200);
+
 	};
-}]);
+}])
+
+.service('SignUpInfo', function() {
+    var user = '',
+    	message = '';
+ 
+    return {
+        getUser: function() {
+            return user;
+        },
+        setUser: function(value) {
+            user = value;
+        },
+        getMessage: function() {
+        	return message;
+        },
+        setMessage: function(value) {
+        	message = value;
+        }
+    };
+});
