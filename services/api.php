@@ -1,5 +1,6 @@
 <?php
  	require_once("Rest.inc.php");
+ 	require_once("../lib/password.php");
 	
 	class API extends REST {
 	
@@ -47,13 +48,16 @@
 
 			if(!empty($email) and !empty($passwd)){
 				if(filter_var($email, FILTER_VALIDATE_EMAIL)){
-					$query="SELECT * FROM users WHERE email = '$email' AND passwd = '$passwd' LIMIT 1";
+					$query="SELECT * FROM users WHERE email = '$email' LIMIT 1";
 					$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
 
 					if($r->num_rows > 0) {
-						$result = $r->fetch_assoc();	
-						// If success everythig is good send header as "OK" and user details
-						$this->response($this->json($result), 200);
+						$result = $r->fetch_assoc();
+
+						if (password_verify($passwd, $result['passwd'])) {
+							// If success everythig is good, send header as "OK" and user details
+							$this->response($this->json($result), 200);
+						}
 					}
 					$this->response('', 204);	// If no records "No Content" status
 				}
@@ -73,19 +77,23 @@
 			$email = $user['email'];	
 			$passwd = $user['password'];
 
-			$query = "INSERT INTO users(email, passwd) VALUES('$email', '$passwd')";
-
 			if(!empty($email) and !empty($passwd)){
 				if(filter_var($email, FILTER_VALIDATE_EMAIL)){
 					// TO DO:
 					// 1. password validation
 					// 2. encrypt the password
+					// 3. Да изнеса database connection в друг файл
 
 					if($this->existUser($email)) {
 						// Already exist a user with this email address
 						$error = array("status" => "Failed", "msg" => "Exist such a user.");
 						$this->response($this->json($error), 400);
 					}
+
+					// password encryption
+					$hash = password_hash($passwd, PASSWORD_BCRYPT);
+
+					$query = "INSERT INTO users(email, passwd) VALUES('$email', '$hash')";
 
 					$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
 					$success = array('status' => "Success", "msg" => "User Created Successfully.", "data" => $user);

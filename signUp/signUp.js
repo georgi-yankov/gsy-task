@@ -25,7 +25,7 @@ angular.module('gsyTask.signUp', ['ngRoute'])
 		            	$scope.messageToShow = true;
 		            };		            
 		        });
-		}, 200);
+		}, 400);
 
 	};
 }])
